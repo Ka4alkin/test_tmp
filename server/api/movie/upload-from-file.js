@@ -14,7 +14,9 @@ const messages = {
     noFileUploaded: 'noFileUploaded',
     wrongFormat: 'wrongFormat',
     wrongActorDtoIn: 'wrongActorDtoIn',
-    transactionErrRollback: 'transactionErrRollback, check is it not the same date in file',
+    creatingActorFailed: 'creatingActorFailed',
+    actorTitleShouldBeUnique: 'actorTitleShouldBeUnique',
+    transactionErrRollback: 'transactionErrRollback, check is it not the same date in file, items should be unique',
   },
   success: {
   },
@@ -27,7 +29,7 @@ class UploadFromFileAbl {
         return AppHelper.throwError(res, messages.error.fileUploadFailed, err);
       }
 
-      if (req?.file?.mimetype !== 'text/plain' ) {
+      if (req?.file?.mimetype !== 'text/plain') {
         return AppHelper.throwError(res, messages.error.wrongFormat);
       }
 
@@ -38,19 +40,18 @@ class UploadFromFileAbl {
       const fileContent = req.file.buffer.toString('utf-8');
       const moviesArray = BinaryHelper.parseMovies(fileContent);
 
-
       const allowedKeysMap = {};
+
       cfg.MOVIE_ALLOWED_FILE_KEY_LIST.forEach((key) => {
         allowedKeysMap[key] = true;
       });
+
       const notUploadedIndexList = [];
       const uploadedIndexList = [];
 
-
+      const actorObjectInitialsCashList = [];
       const transaction = await sequelize.transaction();
 
-      // todo add error handling to unique movies by title, etc..
-      // move same logic to helper
       try {
         for (let movieIndex = 0; movieIndex < moviesArray.length; movieIndex++) {
           const movieObjectItem = moviesArray[movieIndex];
@@ -67,8 +68,12 @@ class UploadFromFileAbl {
 
           const actorObjectList = [];
 
-          if ( movieObjectItem.Stars) {
+          if (movieObjectItem.Stars) {
             const actorsArray = movieObjectItem.Stars.split(', ');
+            const isMovieExist= !!await Movie.findOne({where: [{title: movieObjectItem.Title}]});
+
+            if (isMovieExist) AppHelper.throwError(res, `${messages.error.actorTitleShouldBeUnique} title: ${movieObjectItem.Title}`);
+
             for (let actorIndex = 0; actorIndex < actorsArray.length; actorIndex++) {
               const actorObjectItem = actorsArray[actorIndex];
               const [firstName, lastName] = actorObjectItem.split(' ');
@@ -76,9 +81,27 @@ class UploadFromFileAbl {
               if (!firstName || !lastName) AppHelper.throwError(res, messages.error.wrongActorDtoIn);
 
               const actorDtoIn = {name: firstName, surname: lastName};
-              const newActorObject = await Actor.create(actorDtoIn, {transaction});
+              const existingActorInitials = actorObjectInitialsCashList.find(
+                  (actorInitials) =>
+                    actorInitials.name === actorDtoIn.name && actorInitials.surname === actorDtoIn.surname,
+              );
 
-              actorObjectList.push(newActorObject);
+              if (!existingActorInitials) {
+                const existingActor = await Actor.findOne({where: actorDtoIn});
+
+                if (!existingActor) {
+                  let newActorObject;
+                  try {
+                    newActorObject = await Actor.create(actorDtoIn, {transaction});
+                  } catch (e) {
+                    return AppHelper.throwError(res, messages.error.creatingActorFailed);
+                  }
+                  actorObjectList.push(newActorObject);
+                  actorObjectInitialsCashList.push(actorDtoIn);
+                } else {
+                  actorObjectList.push(existingActor);
+                }
+              }
             }
           }
 

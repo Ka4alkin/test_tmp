@@ -1,4 +1,4 @@
-const {body, oneOf} = require('express-validator');
+const {body} = require('express-validator');
 
 const checkIdsIsUnique = (value) => {
   const uniqueValues = new Set(value);

@@ -6,6 +6,8 @@ class GetAllAbl {
 
     const pageIndex = parseInt(pageInfo?.pageIndex) || 0;
     const pageSize = parseInt(pageInfo?.pageSize) || 50;
+
+    const totalActors = await Actor.count();
     const actors = await Actor.findAll({
       offset: pageSize * pageIndex,
       limit: pageSize,
@@ -15,6 +17,7 @@ class GetAllAbl {
       pageInfo: {
         pageIndex,
         pageSize,
+        total: totalActors,
       },
     };
     res.json(dtoOut);

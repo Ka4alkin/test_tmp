@@ -8,6 +8,7 @@ const {
   getAllMovies,
   getMovieBy,
   updateMovie,
+  uploadFromFile,
   deleteMovie,
 } = require('../controllers/movieController');
 const {pageInfoValidation} = require('../validation_types/page-info-validation');
@@ -16,6 +17,7 @@ const {pageInfoValidation} = require('../validation_types/page-info-validation')
 router.post('', checkAuth, validate(movieCreateValidation), createMovie);
 router.post('/get-all', checkAuth, validate(pageInfoValidation), getAllMovies);
 router.post('/get-by', checkAuth, validate(getByValidation), getMovieBy);
+router.post('/upload-from-file', checkAuth, uploadFromFile);
 router.put('/:id', checkAuth, validate(movieUpdateValidation), updateMovie);
 router.delete('/:id', checkAuth, deleteMovie);
 

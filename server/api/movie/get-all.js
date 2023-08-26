@@ -9,6 +9,7 @@ class GetAllAbl {
     const pageSize = parseInt(pageInfo?.pageSize) || 50;
 
     try {
+      const totalMovies = await Movie.count();
       const movies = await Movie.findAll({
         include: Actor,
         offset: pageSize * pageIndex,
@@ -21,6 +22,7 @@ class GetAllAbl {
         pageInfo: {
           pageIndex,
           pageSize,
+          total: totalMovies,
         },
       };
       res.json(dtoOut);

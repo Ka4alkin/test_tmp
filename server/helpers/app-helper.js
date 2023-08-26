@@ -1,4 +1,3 @@
-const e = require('express');
 const AppHelper = {
   handleAsyncError: function(fn) {
     return async (req, res, next) => {
@@ -16,6 +15,9 @@ const AppHelper = {
     else errorMessage = `${msg}`;
 
     return res.status(400).json({message: errorMessage});
+  },
+  isDateExist: (req, res)=>{
+    if (!Object.keys(req.body).length) return AppHelper.throwError(res, 'noDataToUpdate');
   },
 };
 

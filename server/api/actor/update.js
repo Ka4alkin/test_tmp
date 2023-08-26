@@ -1,5 +1,6 @@
 const Actor = require('../../models/actor');
 const {throwError} = require('../../helpers/app-helper');
+const AppHelper = require('../../helpers/app-helper');
 const messages = {
   error: {
     actorNotFound: 'actorNotFound',
@@ -9,6 +10,7 @@ const messages = {
 
 class UpdateAbl {
   async update(req, res) {
+    AppHelper.isDateExist(req, res);
     const actor = await Actor.findByPk(req.params.id);
     if (!actor) {
       return res.status(404).json({message: messages.error.actorNotFound});

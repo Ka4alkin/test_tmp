@@ -42,6 +42,7 @@ const movieUpdateValidation = [
       .withMessage(`Invalid format, allowed: ${JSON.stringify(allowedFormats)}`),
 
   body('actorIds')
+      .optional()
       .isArray().withMessage('Actor IDs must be an array'),
 ];
 

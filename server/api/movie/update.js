@@ -14,6 +14,7 @@ const messages = {
 
 class UpdateAbl {
   async update(req, res) {
+    AppHelper.isDateExist(req, res);
     const transaction = await sequelize.transaction();
 
     const {id} = req.params;
@@ -26,8 +27,8 @@ class UpdateAbl {
         return AppHelper.throwError(res, messages.error.movieNotFound);
       }
 
-      if (title !== movieObject.title) {
-        const existingMovie = await Movie.findOne({where: [{title}]});
+      if (title && title !== movieObject.title) {
+        const existingMovie = await Movie.findOne({where: {title}});
         if (existingMovie) {
           return AppHelper.throwError(res, messages.error.titleAlreadyExists);
         }
@@ -35,17 +36,24 @@ class UpdateAbl {
 
       const updatedMovie = await movieObject.update({title, releaseYear, format}, {transaction});
 
-      const actors = await Actor.findAll({where: {id: actorIds}});
+      let updatedActors = [];
 
-      if (actors.length !== actorIds.length) {
-        await transaction.rollback();
-        return AppHelper.throwError(res, messages.error.actorNotFound);
+      if (actorIds) {
+        const actors = await Actor.findAll({where: {id: actorIds}});
+
+        if (actors.length !== actorIds.length) {
+          await transaction.rollback();
+          return AppHelper.throwError(res, messages.error.actorNotFound);
+        }
+
+        await updatedMovie.setActors(actors, {through: {selfGranted: false}, transaction});
+        updatedActors = actors;
+      } else {
+        updatedActors = await updatedMovie.getActors();
       }
 
-      await updatedMovie.setActors(actors, {through: {selfGranted: false}, transaction});
-
       await transaction.commit();
-      res.status(200).json(updatedMovie);
+      res.status(200).json({...updatedMovie.toJSON(), actors: updatedActors});
     } catch (error) {
       await transaction.rollback();
       res.status(500).json({message: messages.error.default, error: error.message});

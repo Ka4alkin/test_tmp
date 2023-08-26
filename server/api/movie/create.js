@@ -7,6 +7,7 @@ const messages = {
   error: {
     movieWithTheSameTitleExist: 'movieWithTheSameTitleExist',
     actorDoesNoteExist: 'actorDoesNoteExist',
+    maxActorsExceeded: 'maxActorsExceeded',
     default: 'Error creating movie',
   },
 };
@@ -18,10 +19,14 @@ class CreateAbl {
     const {title, releaseYear, format, actorIds} = req.body;
 
     try {
-      let newMovieObject = await Movie.findOne({where: {title}});
+      let newMovieObject = await Movie.findOne({where: [{title}]});
 
       if (newMovieObject) {
         return AppHelper.throwError(res, messages.error.movieWithTheSameTitleExist);
+      }
+
+      if (actorIds.length > 10) {
+        return AppHelper.throwError(res, messages.error.maxActorsExceeded);
       }
 
       newMovieObject = await Movie.create({title, releaseYear, format}, {transaction});

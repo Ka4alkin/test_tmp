@@ -1,4 +1,12 @@
-const {body} = require('express-validator');
+const {body, oneOf} = require('express-validator');
+
+const checkIdsIsUnique = (value) => {
+  const uniqueValues = new Set(value);
+  if (uniqueValues.size !== value.length) {
+    throw new Error('Actor IDs must be unique');
+  }
+  return true;
+};
 
 const allowedFormats = ['VHS', 'DVD', 'Blu-ray'];
 const validYear = {min: 1900, max: new Date().getFullYear()};
@@ -21,7 +29,8 @@ const movieCreateValidation = [
 
   body('actorIds')
       .notEmpty().withMessage('ActorIds is required')
-      .isArray().withMessage('Actor IDs must be an array'),
+      .isArray().withMessage('Actor IDs must be an array')
+      .custom((value)=>checkIdsIsUnique(value)),
 ];
 
 const movieUpdateValidation = [
@@ -43,7 +52,23 @@ const movieUpdateValidation = [
 
   body('actorIds')
       .optional()
-      .isArray().withMessage('Actor IDs must be an array'),
+      .isArray().withMessage('Actor IDs must be an array')
+      .custom((value)=>checkIdsIsUnique(value)),
+
+];
+const getByValidation = [
+  body('id')
+      .optional()
+      .isInt({min: 0})
+      .withMessage('id must be numeric'),
+  body('title')
+      .optional()
+      .isString()
+      .withMessage('title must be a string'),
+  body('actorName')
+      .optional()
+      .isString()
+      .withMessage('actorName must be a string'),
 ];
 
-module.exports = {movieCreateValidation, movieUpdateValidation};
+module.exports = {movieCreateValidation, movieUpdateValidation, getByValidation};

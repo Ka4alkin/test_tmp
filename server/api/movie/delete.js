@@ -1,5 +1,13 @@
 const Movie = require('../../models/movie');
 
+const messages = {
+  error: {
+    movieNotFound: 'movieNotFound',
+  },
+  success: {
+    movieDeleted: 'Movie deleted successfully',
+  },
+};
 
 class DeleteAbl {
   async delete(req, res) {
@@ -7,11 +15,11 @@ class DeleteAbl {
     const movie = await Movie.findByPk(id);
 
     if (!movie) {
-      return res.status(404).json({message: 'Movie not found'});
+      return res.status(404).json({message: messages.error.movieNotFound});
     }
 
     await movie.destroy();
-    res.json({message: 'Movie deleted successfully'});
+    res.json({message: messages.success.movieDeleted});
   }
 }
 

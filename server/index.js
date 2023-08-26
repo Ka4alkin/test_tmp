@@ -1,9 +1,12 @@
 require('dotenv').config();
+require('./models/actor-movie');
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const helmet = require('helmet');
 const userRoutes = require('./routes/userRoutes');
+const actorRoutes = require('./routes/actorsRoutes');
+const movieRoutes = require('./routes/movieRoutes');
 const notFound = require('./middlewares/not-found');
 const errorHandler = require('./middlewares/error-handler');
 
@@ -18,6 +21,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', userRoutes);
+app.use('/actor', actorRoutes);
+app.use('/movie', movieRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -20,7 +20,7 @@ const loginValidation = [
   body('password').notEmpty().withMessage('Password is required'),
 ];
 
-module.exports = loginValidation;
+
 module.exports = {
   signupValidation,
   loginValidation,

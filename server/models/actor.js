@@ -1,16 +1,23 @@
 const {DataTypes} = require('sequelize');
 const sequelize = require('../database');
 
-const User = sequelize.define('User', {
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  password: {
+const Actor = sequelize.define('Actor', {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  surname: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+}, {
+  indexes: [
+    {
+      unique: true,
+      fields: ['name', 'surname'],
+    },
+  ],
 });
 
-module.exports = User;
+
+module.exports = Actor;

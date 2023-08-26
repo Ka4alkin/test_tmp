@@ -22,7 +22,7 @@ class LoginAbl {
       AppHelper.throwError(res, messages.error.invalidCredentials);
     }
 
-    const token = jwt.sign({userId: user.id}, process.env.JWT_SECRET, {expiresIn: '1m'});
+    const token = jwt.sign({userId: user.id}, process.env.JWT_SECRET, {expiresIn: '3h'});
 
     res.json({message: messages.success.login, token});
   }

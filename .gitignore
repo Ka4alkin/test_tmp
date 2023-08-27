@@ -4,3 +4,4 @@ server/.DS_Store
 server/database.sqlite
 server/src/.env
 server/src/database.sqlite
+client/package-lock.json

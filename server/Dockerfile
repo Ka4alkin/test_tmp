@@ -1,16 +1,16 @@
-FROM node:18
+FROM node:16
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package*.json ./
+COPY package.json .
+COPY package-lock.json .
 
 RUN npm install
 
-COPY src .
+COPY . .
 
 ENV JWT_SECRET jaksdbksal
-ENV PORT 8050
-ENV HOST 0.0.0.0
+ENV PORT 3001
 
 EXPOSE $PORT
 

@@ -29,8 +29,9 @@ app.use('/movies', moviesRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3005;
+const PORT = process.env.PORT;
+const HOST = process.env.HOST;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`Running on http://${HOST}:${PORT}`);
 });

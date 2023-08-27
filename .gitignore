@@ -2,3 +2,5 @@ server/.DS_Store
 .DS_Store
 .idea
 server/database.sqlite
+server/src/.env
+server/src/database.sqlite

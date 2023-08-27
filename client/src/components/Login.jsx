@@ -12,11 +12,10 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const _handleLogin = () => {
+  const _handleLogin =async () => {
     const handleLoginDataObject = {email, password};
-
-    dispatch(login(handleLoginDataObject, navigate));
+    await dispatch(login(handleLoginDataObject));
+    navigate('/');
   };
 
   const _validateForm = () => {

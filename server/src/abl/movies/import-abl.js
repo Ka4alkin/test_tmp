@@ -16,7 +16,7 @@ const messages = {
     wrongActorDtoIn: 'wrongActorDtoIn',
     creatingActorFailed: 'creatingActorFailed',
     actorTitleShouldBeUnique: 'actorTitleShouldBeUnique',
-    transactionErrRollback: 'transactionErrRollback, check is it not the same date in file, items should be unique',
+    transactionErrRollback: 'transactionErrRollback, check is it not the same date in file, items should be unique or incorrectly filled file',
   },
   success: {
   },
@@ -63,10 +63,10 @@ class ImportMovieAbl {
           const isKeysMatched = movieObjectItemKeys.every((key) => allowedKeysMap.hasOwnProperty(key));
 
           if (!isKeysMatched || isMovieExist) {
-            notUploadedIndexList.push({movieIndex, title: movieObjectItem.Title, alreadyExist: true});
+            notUploadedIndexList.push(movieObjectItem.Title);
             continue;
           } else {
-            uploadedIndexList.push({movieIndex, title: movieObjectItem.Title});
+            uploadedIndexList.push(movieObjectItem.Title);
           }
 
           const actorObjectList = [];
@@ -121,7 +121,7 @@ class ImportMovieAbl {
         }
 
         await transaction.commit();
-        res.json({uploadedIndexList, notUploadedIndexList});
+        res.json({uploadedIndexList, alreadyExistTitleList: notUploadedIndexList});
       } catch (error) {
         await transaction.rollback();
         res.status(500).json({message: messages.error.transactionErrRollback, error: error.message});

@@ -1,10 +1,10 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import Home from './pages/Home.jsx';
-import Login from './components/Login.jsx';
+import LoginForm from './forms/LoginForm.jsx';
 import NotFound from './components/NotFound.jsx';
 import './index.css';
-import Signup from './components/Signup.jsx';
+import Signup from './forms/SignupForm.jsx';
 import {useSelector} from 'react-redux';
 
 function App() {
@@ -12,8 +12,8 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={isAuthenticated ? <Home /> : <LoginForm />} />
+      <Route path="/login" element={<LoginForm />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

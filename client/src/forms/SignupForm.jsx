@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import axiosInstance from '../axiosInstance.js';
 import {alertErr, alertSuccess, validateInput, validateInputPassword} from '../utils.js';
-import {InputBox} from './InputBox.jsx';
+import {InputBox} from '../components/InputBox.jsx';
 import {cfg} from '../config.js';
 
-const SignUp = () => {
+const SignupForm = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -92,4 +92,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignupForm;

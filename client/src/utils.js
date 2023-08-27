@@ -29,9 +29,9 @@ export const removeTokenFromLocalStorage = () => {
   return localStorage.removeItem(`token${import.meta.env.VITE_REST_API_GATEWAY}`);
 };
 
-export const validateInput = (inputValue, pattern, errorList, errorKey) => {
-  if (!inputValue) errorList[errorKey] = `${errorKey} is required`;
-  else if (!pattern.test(inputValue)) errorList[errorKey] = `Invalid ${errorKey} format`;
+export const validateInput = (inputValue, pattern, errorList, errorKey, msg = '') => {
+  if (!inputValue) errorList[errorKey] = `${errorKey} ${msg ? msg :'is required'}`;
+  else if (!pattern.test(inputValue)) errorList[errorKey] = `${msg ? msg :`Invalid ${errorKey} format`}`;
 };
 
 export const validateInputPassword = (password, errorList) => {

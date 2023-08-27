@@ -3,11 +3,12 @@ import axiosInstance from '../axiosInstance.js';
 import {alertErr, alertSuccess} from '../utils.js';
 import {fetchMovies} from '../store/actions/movieActions.js';
 import {useDispatch} from 'react-redux';
+import Btn from './Btn.jsx';
 
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const dispatch = useDispatch();
-  const handleFileChange = (event) => {
+  const _handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
 
@@ -35,13 +36,8 @@ const FileUpload = () => {
 
   return (
     <div className="my-4">
-      <input type="file" accept=".txt" onChange={handleFileChange} />
-      <button
-        className="py-2 px-3 bg-gray-400 hover:bg-gray-500 text-white rounded-md focus:ring focus:ring-gray-200"
-        onClick={handleUpload}
-      >
-        Import movies!
-      </button>
+      <input type="file" accept=".txt" onChange={_handleFileChange} />
+      <Btn content={'Import movies!'} handler={handleUpload}/>
     </div>
   );
 };

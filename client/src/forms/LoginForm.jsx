@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {login} from '../store/actions/authActions.js';
-import {InputBox} from './InputBox.jsx';
+import {InputBox} from '../components/InputBox.jsx';
 import {validateInput, validateInputPassword} from '../utils.js';
 import {cfg} from '../config.js';
 
-const Login = () => {
+const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -65,4 +65,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginForm;

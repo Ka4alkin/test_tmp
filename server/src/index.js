@@ -10,10 +10,13 @@ const moviesRoutes = require('./routes/movies-routes');
 const sessionsRoutes = require('./routes/sessions-routes');
 const notFound = require('./middlewares/not-found-middleware');
 const errorHandler = require('./middlewares/error-handler-middleware');
+const cors = require('cors');
+
 
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.json({

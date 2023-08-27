@@ -1,10 +1,5 @@
 const {body} = require('express-validator');
 
-const signupValidationPasswordOption = {
-  minLength: 8, maxLength: 15, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1,
-};
-const signupValidationPasswordMsg = `Password must be strong and meet the requirements ${JSON.stringify(signupValidationPasswordOption)}`;
-
 const signupValidation = [
   body('email')
       .notEmpty().withMessage('Email is required')
@@ -15,7 +10,7 @@ const signupValidation = [
       .isLength({min: 3, max: 50}).withMessage('Name must be between 3 and 50 characters'),
   body('password')
       .notEmpty().withMessage('Password is required')
-      .isStrongPassword(signupValidationPasswordOption).withMessage(signupValidationPasswordMsg),
+      .isLength({min: 3, max: 50}).withMessage('Password must be between 5 and 15 characters'),
   body('confirmPassword')
       .notEmpty().withMessage('Confirm Password is required')
       .custom((value, {req}) => {
@@ -28,11 +23,11 @@ const signupValidation = [
 
 const loginValidation = [
   body('email')
-      .optional()
+      .notEmpty().withMessage('Email is required')
       .isEmail().withMessage('Invalid email format'),
   body('password')
-      .optional()
-      .isStrongPassword(signupValidationPasswordOption).withMessage(signupValidationPasswordMsg),
+      .notEmpty().withMessage('Password is required')
+      .isString().withMessage('Password must be a string'),
 ];
 
 

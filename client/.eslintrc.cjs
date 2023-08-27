@@ -31,5 +31,7 @@ module.exports = {
     'require-jsdoc': 'off',
     'max-len': ['error', {code: 150}],
     'no-unused-vars': 'off',
+    'react/prop-types': 'off',
+    'react/react-in-jsx-scope': 'off'
   },
 };

@@ -24,7 +24,7 @@ class SessionCreateAbl {
 
     const token = jwt.sign({userId: userObject.id}, process.env.JWT_SECRET, {expiresIn: '3h'});
 
-    res.json({message: messages.success.login, token});
+    res.json({...userObject.dataValues, token});
   }
 }
 

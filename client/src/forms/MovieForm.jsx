@@ -34,7 +34,8 @@ const MovieForm = ({onSubmit, onClose}) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const _handleFormSubmit = async () => {
+  const _handleFormSubmit = async (e) => {
+    e.preventDefault();
     if (_validateForm()) {
       try {
         const formData = {

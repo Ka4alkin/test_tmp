@@ -6,7 +6,7 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY src .
 
 ENV JWT_SECRET jaksdbksal
 ENV PORT 8050

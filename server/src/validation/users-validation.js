@@ -5,6 +5,7 @@ const signupValidation = [
       .notEmpty().withMessage('Email is required')
       .isEmail().withMessage('Invalid email format'),
   body('name')
+      .trim()
       .notEmpty().withMessage('Name is required')
       .isString().withMessage('Name must be a string')
       .isLength({min: 3, max: 50}).withMessage('Name must be between 3 and 50 characters'),
